@@ -12,7 +12,7 @@ class Selecter extends React.Component{
 	renderAvailableLabels(){
 		let labelsHtml = new Array();
 		for(let col of this.props.columns){
-			if(!this.state.label.includes(col.headerName)) labelsHtml.push(<option value={col.headerName}>{col.headerName}</option>);
+			if(!this.props.label.includes(col.headerName)) labelsHtml.push(<option value={col.headerName}>{col.headerName}</option>);
 		}
 		return labelsHtml;
 	}
@@ -20,13 +20,18 @@ class Selecter extends React.Component{
 	renderAvailablePredictors(){
 		let predictorsHtml = new Array();
 		for(let col of this.props.columns){
-			if(!this.state.predictors.includes(col.headerName)) predictorsHtml.push(
-				<input
-				name={col.headerName} type="checkbox"
-				checked={this.state.isGoing}
-				onChange={this.handleInputChange} />
-				<input name={col.headerName} type="text" value={col.headerName} onChange={()=>{this.props.selecterCallback(this.state.predictors)}}/>
-			);
+			if(!this.props.predictors.includes(col.headerName)) {
+				predictorsHtml.push(
+					<div>
+					{col.headerName}
+
+					<input
+					name={col.headerName} type="checkbox"
+					onChange={this.onChangePredictors.bind(this)} />
+					</div>
+				);
+			}
+
 		}
 		return predictorsHtml;
 	}
@@ -35,15 +40,19 @@ class Selecter extends React.Component{
 		this.props.selecterCallback(this.props.predictors,e.target.value);
 	}
 
-	onChangePredictors(){
-		
+	onChangePredictors(e){
+		let p = this.props.predictors;
+		if(p.includes(e.target.name)){
+			p.slice(p.indexOf(e.target.name),1);
+		}else p.push(e.target.name);
+		this.props.selecterCallback(p,this.props.label);
 	}
 
 	render(){
 		return(
 			<div className="row">
 			<div className="col-6">
-				<select onChange={this.onChangeLabel}>
+				<select onChange={this.onChangeLabel.bind(this)}>
 					{this.renderAvailableLabels()}
 				</select>
 			</div>

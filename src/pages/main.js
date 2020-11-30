@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-//import KNN from "../components/knn";
+import KNN from "../components/knn";
 import Selecter from "../components/selecter";
 import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -73,10 +73,10 @@ class main extends Component {
 			<div className="container">
 			<div className="row">
 			<div className="col-2">
-			{/*<KNN x={predictors_value} y={label_value} knn={3} predictors={this.state.predictors}/>*/}
+			<KNN x={predictors_value} y={label_value} knn={3} predictors={this.state.predictors}/>
 			</div>
 			<div className="col-2">
-			<Selecter columns={this.state.columns} predictors={this.state.predictors} label={this.state.label}/>
+			<Selecter columns={this.state.columns} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>
 			</div>
 			<div className="col-8">
 			</div> 
