@@ -27,14 +27,19 @@ class graphSelector extends Component {
 				checkBoxes: <input type="checkbox"/>
 			})
 		}
-    }
+	}
+	
+	sendDataToParent(e){
+		//console.log(e.target.value)
+		this.props.returnData(e.target.value) //Callback, params => Access in parent
+	}
     
     render() {
         const { labelsHtml } = this.state;
         return (
             <React.Fragment>
                 <div className="col-6">
-                    <select>
+                    <select onChange={this.sendDataToParent.bind(this)}>
                         { labelsHtml }
                     </select>
 			    </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import KNN from "../components/knn";
 import Selecter from "../components/selecter";
 import GraphSelector from "../components/pages/graphSelector";
+import Graph from "../components/graph";
 
 import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -13,7 +14,12 @@ class main extends Component {
 		columns: [],
 		data: [],
 		predictors: [],
-		label: []
+		label: "",
+		xlabel: "", 
+		ylabel:"",
+		x: [],
+		y: [],
+		c: []
 	}
 
 	componentDidMount(){
@@ -24,7 +30,7 @@ class main extends Component {
 			});
 		}
 		else{
-			//console.log(this.props.location.data.predictores)
+			console.log(this.props.location.data.columnas)
 			this.setState({
 				columns: this.props.location.data.columnas,
 				data: this.props.location.data.datos
@@ -39,11 +45,12 @@ class main extends Component {
 	}
 
 	getColumnsData = (columnsName) =>{
-		let obj = new Object();
-		for(let columnName of columnsName){
-			obj[columnName] = new Array();
+		let obj = new Object(),num=0;
+		for(let col of columnsName){
+			obj[col] = new Array();
 			for(let data of this.state.data){
-				obj[columnName].push(data[columnName]);
+				num = (data[col] == null || data[col] == undefined) ? 0:data[col];
+				obj[col].push(num);
 			}
 		}
 		return obj;
@@ -52,13 +59,49 @@ class main extends Component {
 	selecterCallback(predictors,label){
 		this.setState({predictors:predictors,label:label});
 	}
-	
 
+	graphSelectorCallbackX1(ylabel){
+		this.setState({
+			ylabel: ylabel
+		}, () => { 
+			this.setState({
+				y: this.getColumnsData([this.state.ylabel])
+			})
+		});
+	}
+
+	graphSelectorCallbackX2(xlabel){
+		this.setState({
+			xlabel:xlabel
+		}, () => {
+			this.setState({
+				x: this.getColumnsData([this.state.xlabel])
+			});
+		});
+	}
+
+	onlyUnique(value, index, self) {
+		return self.indexOf(value) === index;
+	}
+
+	encoder(label){
+		var classes = label;
+		var uniqueClasses = classes.filter(this.onlyUnique);
+		var classified_pairs = new Array();
+
+		for (var i = 0; i < classes.length; i++) {
+			classified_pairs[i] = uniqueClasses.indexOf(classes[i]);
+		}
+		return classified_pairs;
+	}
+	
+	
 	render() {
-		//console.log(this.state.columns);
-		const data = this.getColumnsData(this.state.predictors.concat(this.state.label));
-		const label_value = data[this.state.label],
-			predictors_value = this.state.predictors.map(p=>data[p]);
+		const x_1 = this.getColumnsData([this.state.xlabel])[this.state.xlabel],
+			  x_2 = this.getColumnsData([this.state.ylabel])[this.state.ylabel],
+			  c = this.getColumnsData([this.state.label])[this.state.label],
+			  y = this.encoder(c),
+			  labels = c.filter(this.onlyUnique);
 
 		return (
 			<React.Fragment>
@@ -73,15 +116,20 @@ class main extends Component {
 			<div className="container">
 			<div className="row">
 			<div className="col-2">
-			<KNN x={[[20,22,20,22,22],[10,10,10,10,10]]} y={[0,1,0,1,1]} knn={3} predictors={this.state.predictors}/>
+			<KNN x={x_1} y={y} knn={3} predictors={[this.state.xlabel]} labels={labels}/>
 			</div>
 			<div className="col-2">
 			<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>
 
 			</div>
 			<div className="col-8">
-				<GraphSelector columns={this.props.location.data.columnas}></GraphSelector>
+				x1:<GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector>
+				x2:<GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector>
 			</div> 
+
+
+			<Graph xlabel={this.state.xlabel} ylabel={this.state.ylabel} x={x_1} y={x_2} c={c} ></Graph>
+
 			</div>
 			</div>
 			</React.Fragment>

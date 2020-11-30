@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
 import Papa from 'papaparse';
+import '../css/loadData.css';
+import logoCetys from '../imgs/cetyslogo.png';
+import requ1 from '../imgs/req1.PNG';
 
 class loadData extends React.Component {
     state = {
@@ -18,7 +21,8 @@ class loadData extends React.Component {
         if(csvfile !== undefined){
             Papa.parse(csvfile, {
                 complete: (results) => {this.saveData(results)},
-                header: true
+                header: true,
+                dynamicTyping: true
               });
         }
         else{
@@ -47,10 +51,22 @@ class loadData extends React.Component {
     render() {
         return (
             <Fragment>
-                <h2>Import CSV File!</h2>
-                <input className="csv-input" type="file"  name="file" placeholder={null} onChange={this.handleChange}/>
-                <p/>
-                <button onClick={this.importCSV}> Enviar Datos</button>
+                <div className='backgroundMain'>
+                    <div className='contenedor pt-4'>
+                        <h1>Herramienta interactiva para clasificación por KNN</h1>
+                        <img id='logoCetys' src={logoCetys}></img>
+    
+                        <h3 className='p-3'>Importa tu archivo CSV!</h3>
+                        <input className="csv-input" type="file"  name="file" placeholder={null} onChange={this.handleChange}/>
+                        <p/>
+                        <button onClick={this.importCSV}> Enviar Datos</button>
+
+                        <h4 className='p-3'>Requisitos para un correcto funcionamiento:</h4>
+                        <li>La primera fila del archivo CSV, debe contener el nombre de los predictores. Ejemplo:</li>
+                        <img id='req1' src={requ1}></img>
+                        
+                    </div>
+                </div>
             </Fragment>
         )
     }

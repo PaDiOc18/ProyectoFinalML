@@ -6,7 +6,7 @@ class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			classes: this.props.classes,
+			classes: this.props.c,
 			xlabel: this.props.xlabel,
 			ylabel: this.props.ylabel,
 			newdata: this.pairs_creator()
@@ -70,17 +70,17 @@ class Graph extends React.Component{
 			animationEnabled: true,
 			zoomEnabled: true,
 			title:{
-				text: this.state.xlabel + " vs " + this.state.ylabel
+				text: this.props.xlabel + " vs " + this.props.ylabel
 			},
 			axisX: {
-				title: this.state.xlabel,
+				title: this.props.xlabel,
 				crosshair: {
 					enabled: true,
 					snapToDataPoint: true
 				}
 			},
 			axisY:{
-				title: this.state.ylabel,
+				title: this.props.ylabel,
 				crosshair: {
 					enabled: true,
 					snapToDataPoint: true
@@ -91,7 +91,7 @@ class Graph extends React.Component{
 				horizontalAlign: "left"
 		  
 			  },
-			data: this.state.newdata
+			data: this.pairs_creator()
         }
         
 		return (
