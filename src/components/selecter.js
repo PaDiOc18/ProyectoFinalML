@@ -17,10 +17,8 @@ class Selecter extends React.Component{
 				checkBoxes.push(
 					<div className="form-check form-check-inline">
 					{this.props.columns[i]['field']}
-					<input name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors.bind(this)}/>
+					<input className='ml-1' name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors.bind(this)}/>
 					</div>);
-
-
 			}
 	
 			this.setState({
@@ -55,13 +53,15 @@ class Selecter extends React.Component{
 		return(
 			<React.Fragment>
 				<div className='col-6'>
-					<select onChange={this.onChangeLabel.bind(this)}>
+					<label htmlFor='elSelect'><h6>Selecciona tu respuesta (Y):</h6></label>
+					<select name='elSelect' onChange={this.onChangeLabel.bind(this)}>
 						{ labelsHtml }
 					</select>
 				</div>
 
 				<div className='col-6'>
-					<div className='list-group pb-2 pt-2'>
+					<label htmlFor='losCheckboxes'><h6>Marca los predictores a usar (X):</h6></label>
+					<div name ='losCheckboxes' className='list-group pt-2'>
 						{ checkBoxes }
 					</div>
 				</div>

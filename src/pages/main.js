@@ -60,7 +60,9 @@ class main extends Component {
 	}
 
 	selecterCallback(predictors, label) {
-		this.setState({ predictors: predictors, label: label }, () => { console.log(this.state.predictors,this.state.label)});
+		this.setState({ predictors: predictors, label: label }, () => { 
+			console.log(this.state.predictors)
+		});
 	}
 
 	graphSelectorCallbackX1(ylabel) {
@@ -112,10 +114,10 @@ class main extends Component {
 				<div className="mainContenedor">
 					<div className="container" id='genContenedor'>
 						<div className="row">
-							<div class="jumbotron" style={{ background: 'transparent' }}>
-								<h1 class="display-4">Herramienta interactiva para clasificación por KNN</h1>
-								<p class="lead">Esta herramienta facilita el realizar KNN desde una aplicación facil y util. Las opciones intuitivas te guiaran a lo largo del proceso.</p>
-								<hr class="my-3"></hr>
+							<div className="jumbotron" style={{ background: 'transparent' }}>
+								<h1 className="display-4">Herramienta interactiva para clasificación por KNN</h1>
+								<p className="lead">Esta herramienta facilita el realizar KNN desde una aplicación facil y util. Las opciones intuitivas te guiaran a lo largo del proceso.</p>
+								<hr className="my-3"></hr>
 
 								<p>Desarrollado por: Gerardo Meneses, Pablo Diaz, Diego Garibay y Kevin Huerta</p>
 							</div>
@@ -131,37 +133,43 @@ class main extends Component {
 						<br></br>
 						<button className="btn btn-primary btn-lg" onClick={this.regresarAload}>Usar otro dataset</button>
 
-						<hr className="my-4"></hr>
+						<hr className="my-4" color='yellow'></hr>
 
 						<div className="row">
 							<div className="col-6">
 								<div>Cantidad de vecinos:</div>
 								<input type='numeric' onChange={ (e) => { this.setState({ k: e.target.value})}}/>
 
-								<KNN x={x_1} y={y} knn={this.state.k} predictors={[this.state.xlabel]} labels={labels} />
+								<KNN x={x_1} y={y} knn={this.state.k} predictors={this.state.predictors} labels={labels} />
 							</div>
 							<div className="col-6">
 								<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)} />
 							</div>
 						</div>
 
-						<hr className="my-4"></hr>
+						<hr className="my-4" color='yellow'></hr>
 
 						<div className="row align-items-center" >
 
 							<div className="col-4">
-								<div>Comprueba el punto:</div>
-								<hr className="my-4"></hr>
+								<div>Elige tus predictores para gráficar:</div>
+								<br></br>
+
+								<div> X1: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector></div>
+								<br></br>
+								<div> X2: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector></div>
+								
+								<br></br>
+								<br></br>
+								<div>Gráfica tu punto:</div>
+								<br></br>
+
 								<div>
-									X:
-									<input type='numeric' onChange={ (e) => { this.setState({ xnew: e.target.value})}}/>
-									<div><GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector></div>
+									X: <input type='numeric' onChange={ (e) => { this.setState({ xnew: e.target.value})}}/>
 								</div>
 								<br></br>
 								<div>
-									Y:
-									<input type='numeric' onChange={ (e) => { this.setState({ ynew: e.target.value})}}/>
-									<div><GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector></div>
+									Y: <input type='numeric' onChange={ (e) => { this.setState({ ynew: e.target.value})}}/>
 								</div>
 							</div>
 							<div className="col-8">

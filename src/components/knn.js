@@ -22,7 +22,7 @@ class KNN extends React.Component {
 	}
 
 	norm(x1,x2){
-     		 return math.subtract(x1,x2).map(x=>x**2)
+     	return math.subtract(x1,x2).map(x=>x**2)
     }
 	
 	predict(new_x) {
@@ -66,17 +66,26 @@ class KNN extends React.Component {
 		}
 	}
 
-
-
-
 	renderForm(){
-		let out = this.props.predictors.map((p)=>{
-			return(
+		let inputBoxes = new Array();
+		
+		for(let p of this.props.predictors){
+			inputBoxes.push(
 				<React.Fragment>	
 				{p} <input type="number" name={p} onChange={this.onChangeNewX.bind(this)}/>
+				<br></br>
 				</React.Fragment>
-				)})
-		return(out);
+			)
+		}
+		return inputBoxes;
+	}
+
+	onChangeNewX(e){
+		const value = e.target.value;
+		this.new_x = parseFloat(value);
+	}
+	
+	render(){
 	}
 
 	onChangeNewX(e){
