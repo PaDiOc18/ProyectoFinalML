@@ -3,61 +3,60 @@ import React from 'react'
 
 class Selecter extends React.Component{
 
-	constructor(props){
-		super(props);
+	state = {
+		labelsHtml: [],
+		checkBoxes: []
 	}
 
-
-
-	renderAvailableLabels(){
-		let labelsHtml = new Array();
-		for(let col of this.props.columns){
-			if(!this.props.label.includes(col.headerName)) labelsHtml.push(<option value={col.headerName}>{col.headerName}</option>);
-		}
-		return labelsHtml;
-	}
-
-	renderAvailablePredictors(){
-		let predictorsHtml = new Array();
-		for(let col of this.props.columns){
-			if(!this.props.predictors.includes(col.headerName)) {
-				predictorsHtml.push(
-					<div>
-					{col.headerName}
-
-					<input
-					name={col.headerName} type="checkbox"
-					onChange={this.onChangePredictors.bind(this)} />
-					</div>
-				);
+	componentDidMount(){
+		if(this.props.columns.length > 0){
+			let { labelsHtml,checkBoxes } = this.state;
+	
+			for(let i = 0; i < this.props.columns.length; i++){
+				labelsHtml.push(<option value={this.props.columns[i]['field']}>{this.props.columns[i]['field']}</option>)
+				checkBoxes.push(<div className='d-flex justify-content-around'>{this.props.columns[i]['field']}<input name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors.bind(this)} /></div>);
 			}
-
+	
+			this.setState({
+				labelsHtml: labelsHtml,
+				checkBoxes: checkBoxes
+			})
 		}
-		return predictorsHtml;
+		else{
+			this.setState({
+				labelsHtml: <option value='Nada'>Nullptr</option>,
+				checkBoxes: <input type="checkbox"/>
+			})
+		}
 	}
 
 	onChangeLabel(e){
-		this.props.selecterCallback(this.props.predictors,e.target.value);
+		console.log(e.target.value)
+		//this.props.selecterCallback(this.props.predictors,e.target.value);
 	}
-
+		
 	onChangePredictors(e){
 		let p = this.props.predictors;
 		if(p.includes(e.target.name)){
-			p.slice(p.indexOf(e.target.name),1);
+			let indice = p.indexOf(e.target.name)
+			p.pop(indice)
 		}else p.push(e.target.name);
+
+		console.log(p)
 		this.props.selecterCallback(p,this.props.label);
 	}
 
 	render(){
+		const { labelsHtml, checkBoxes} = this.state;
 		return(
 			<div className="row">
 			<div className="col-6">
 				<select onChange={this.onChangeLabel.bind(this)}>
-					{this.renderAvailableLabels()}
+					{ labelsHtml }
 				</select>
 			</div>
-			<div className="col-6">
-				{this.renderAvailablePredictors()}
+			<div className='list-group pb-2 pt-2'>
+				{ checkBoxes }
 			</div>
 			</div>
 		)

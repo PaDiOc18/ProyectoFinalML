@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import KNN from "../components/knn";
 import Selecter from "../components/selecter";
+import GraphSelector from "../components/pages/graphSelector";
+
 import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -15,7 +17,6 @@ class main extends Component {
 	}
 
 	componentDidMount(){
-		//console.log(this.props.location.data);
 		if(this.props.location.data == null){
 			alert('No se pudo obtener ningun dato, reedireccionando....');
 			this.props.history.push({
@@ -23,6 +24,7 @@ class main extends Component {
 			});
 		}
 		else{
+			//console.log(this.props.location.data.predictores)
 			this.setState({
 				columns: this.props.location.data.columnas,
 				data: this.props.location.data.datos
@@ -53,13 +55,11 @@ class main extends Component {
 	
 
 	render() {
-		console.log(this.state.columns);
-
-
+		//console.log(this.state.columns);
 		const data = this.getColumnsData(this.state.predictors.concat(this.state.label));
 		const label_value = data[this.state.label],
 			predictors_value = this.state.predictors.map(p=>data[p]);
-		
+
 		return (
 			<React.Fragment>
 			<div style={{ height: '500px', width: '100%' }} className="ag-theme-alpine">
@@ -76,9 +76,11 @@ class main extends Component {
 			<KNN x={predictors_value} y={label_value} knn={3} predictors={this.state.predictors}/>
 			</div>
 			<div className="col-2">
-			<Selecter columns={this.state.columns} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>
+			<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>
+
 			</div>
 			<div className="col-8">
+				<GraphSelector columns={this.props.location.data.columnas}></GraphSelector>
 			</div> 
 			</div>
 			</div>
