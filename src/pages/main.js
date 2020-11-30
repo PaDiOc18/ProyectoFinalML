@@ -73,7 +73,7 @@ class main extends Component {
 			<div className="container">
 			<div className="row">
 			<div className="col-2">
-			<KNN x={predictors_value} y={label_value} knn={3} predictors={this.state.predictors}/>
+			<KNN x={[[20,22,20,22,22],[10,10,10,10,10]]} y={[0,1,0,1,1]} knn={3} predictors={this.state.predictors}/>
 			</div>
 			<div className="col-2">
 			<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>

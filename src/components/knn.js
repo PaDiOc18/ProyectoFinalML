@@ -10,12 +10,20 @@ class KNN extends React.Component {
 		 * this.props.knn
 		 * this.props.predictors
 		 */
+		this.new_x = new Object();
+		this.state = {
+			pred:0.0
+		}
+	}
 
-
+	onClickPredict(){
+		console.log(Object.values(this.new_x));
+		const pred = this.predict(Object.values(this.new_x));
+		this.setState({pred:pred});
 	}
 
 	norm(x1,x2) {
-     		 return math.subtract(x1,x2)._data.map(x=>x**2)
+     		 return math.subtract(x1,x2).map(x=>x**2)
     	}
 	
 	predict(new_x) {
@@ -26,12 +34,16 @@ class KNN extends React.Component {
 			label_counter = math.zeros(this.props.y.length)._data,
 			d = 0.0;
 		
-		// Calculating distance between 'x' and 'x_i' 
-		for(let i=0;i<this.props.x.length;i++){
-			d = this.norm(new_x,this.props.x[i])
-			nb_distance.push(d)
+		// Calculating distance between 'x' and 'x_i'
+		const X = math.matrix(this.props.x),
+			size = X.size();
+		if(size.length==1){
+			nb_distance = this.norm(this.props.x,new_x[0])
+		}else if(size.length==2){
+			for(let i=0;i<size[1];i++){
+				nb_distance.push(this.norm(math.flatten(math.column(X,i)),new_x));
+			}
 		}
-		
 		// picking 'k' nearest neighbours.
 		nb_distance_clone = nb_distance.copyWithin()
 		for(let i=0;i<this.props.knn;i++){
@@ -51,27 +63,52 @@ class KNN extends React.Component {
 	}
 
 
-	render_form(){
-		let out = this.props.predictors.map((p)=>{ return p})
+
+
+	renderForm(){
+		let out = this.props.predictors.map((p)=>{
+			return(
+				<div className="container">
+				<div className="row justify-conetent-start">
+				{p}
+				</div>
+				<div className="row justify-conetent-start">
+				<input type="number" name={p} onChange={this.onChangeNewX.bind(this)}/>
+				</div>
+				</div>
+				)})
 		return(out);
 	}
 
+	onChangeNewX(e){
+		const key = e.target.name,
+			value = e.target.value;
+		this.new_x[key] = parseFloat(value);
+	}
 	
-
-
-	render() {
+	render(){
 		return (
 			<div className="container">
 			<div className="row">
+			<div className="col-12 d-flex justify-content-center">
 			Predictors:
 			</div>
-			<div className="row">
-			{this.render_form()}
 			</div>
 			<div className="row">
-				<button type="button" className="btn btn-primary">Predict</button>
+			<div className="col-12">
+				{this.renderForm()}
 			</div>
-			
+			</div>
+			<div className="row">
+			<div className="col-12">
+			<button type="button" className="btn btn-primary w-100" onClick={this.onClickPredict.bind(this)}>Predict</button>
+			</div>
+			</div>
+			<div className="row">
+			<div className="col-12">
+				Clase Perteneciente: {this.state.pred}
+			</div>
+			</div>
 			</div>
 		);
 	}

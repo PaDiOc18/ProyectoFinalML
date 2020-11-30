@@ -32,7 +32,7 @@ class Selecter extends React.Component{
 
 	onChangeLabel(e){
 		console.log(e.target.value)
-		//this.props.selecterCallback(this.props.predictors,e.target.value);
+		this.props.selecterCallback(this.props.predictors,e.target.value);
 	}
 		
 	onChangePredictors(e){
