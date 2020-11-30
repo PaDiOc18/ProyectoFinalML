@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import KNN from "../components/knn";
 import Selecter from "../components/selecter";
-import GraphSelector from "../components/pages/graphSelector";
+import GraphSelector from "../components/graphSelector";
 import Graph from "../components/graph";
-
-import {AgGridReact} from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import '../css/main.css';
 
 class main extends Component {
 
@@ -15,21 +15,24 @@ class main extends Component {
 		data: [],
 		predictors: [],
 		label: "",
-		xlabel: "", 
-		ylabel:"",
+		xlabel: "",
+		ylabel: "",
 		x: [],
 		y: [],
-		c: []
+		c: [],
+		xnew: 1,
+		ynew: 1,
+		k: 3
 	}
 
-	componentDidMount(){
-		if(this.props.location.data == null){
+	componentDidMount() {
+		if (this.props.location.data == null) {
 			alert('No se pudo obtener ningun dato, reedireccionando....');
 			this.props.history.push({
 				pathname: '/loaddata'
 			});
 		}
-		else{
+		else {
 			console.log(this.props.location.data.columnas)
 			this.setState({
 				columns: this.props.location.data.columnas,
@@ -44,35 +47,35 @@ class main extends Component {
 		})
 	}
 
-	getColumnsData = (columnsName) =>{
-		let obj = new Object(),num=0;
-		for(let col of columnsName){
+	getColumnsData = (columnsName) => {
+		let obj = new Object(), num = 0;
+		for (let col of columnsName) {
 			obj[col] = new Array();
-			for(let data of this.state.data){
-				num = (data[col] == null || data[col] == undefined) ? 0:data[col];
+			for (let data of this.state.data) {
+				num = (data[col] == null || data[col] == undefined) ? 0 : data[col];
 				obj[col].push(num);
 			}
 		}
 		return obj;
 	}
 
-	selecterCallback(predictors,label){
-		this.setState({predictors:predictors,label:label});
+	selecterCallback(predictors, label) {
+		this.setState({ predictors: predictors, label: label });
 	}
 
-	graphSelectorCallbackX1(ylabel){
+	graphSelectorCallbackX1(ylabel) {
 		this.setState({
 			ylabel: ylabel
-		}, () => { 
+		}, () => {
 			this.setState({
 				y: this.getColumnsData([this.state.ylabel])
 			})
 		});
 	}
 
-	graphSelectorCallbackX2(xlabel){
+	graphSelectorCallbackX2(xlabel) {
 		this.setState({
-			xlabel:xlabel
+			xlabel: xlabel
 		}, () => {
 			this.setState({
 				x: this.getColumnsData([this.state.xlabel])
@@ -84,7 +87,7 @@ class main extends Component {
 		return self.indexOf(value) === index;
 	}
 
-	encoder(label){
+	encoder(label) {
 		var classes = label;
 		var uniqueClasses = classes.filter(this.onlyUnique);
 		var classified_pairs = new Array();
@@ -94,44 +97,81 @@ class main extends Component {
 		}
 		return classified_pairs;
 	}
-	
-	
+
+
 	render() {
 		const x_1 = this.getColumnsData([this.state.xlabel])[this.state.xlabel],
-			  x_2 = this.getColumnsData([this.state.ylabel])[this.state.ylabel],
-			  c = this.getColumnsData([this.state.label])[this.state.label],
-			  y = this.encoder(c),
-			  labels = c.filter(this.onlyUnique);
+			x_2 = this.getColumnsData([this.state.ylabel])[this.state.ylabel],
+			c = this.getColumnsData([this.state.label])[this.state.label],
+			y = this.encoder(c),
+			labels = c.filter(this.onlyUnique),
+			newpoint = {x: this.state.xnew, y: this.state.ynew};
 
 		return (
 			<React.Fragment>
-			<div style={{ height: '500px', width: '100%' }} className="ag-theme-alpine">
-			<AgGridReact
-			columnDefs={this.state.columns}
-			rowData={this.state.data}
-			pagination={true}>
-			</AgGridReact>
-			</div>
-			<button onClick={this.regresarAload}>Usar otro dataset</button>
-			<div className="container">
-			<div className="row">
-			<div className="col-2">
-			<KNN x={x_1} y={y} knn={3} predictors={[this.state.xlabel]} labels={labels}/>
-			</div>
-			<div className="col-2">
-			<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)}/>
+				<div className="mainContenedor">
+					<div className="container" id='genContenedor'>
+						<div className="row">
+							<div class="jumbotron" style={{ background: 'transparent' }}>
+								<h1 class="display-4">Herramienta interactiva para clasificación por KNN</h1>
+								<p class="lead">Esta herramienta facilita el realizar KNN desde una aplicación facil y util. Las opciones intuitivas te guiaran a lo largo del proceso.</p>
+								<hr class="my-3"></hr>
 
-			</div>
-			<div className="col-8">
-				x1:<GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector>
-				x2:<GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector>
-			</div> 
+								<p>Desarrollado por: Gerardo Meneses, Pablo Diaz, Diego Garibay y Kevin Huerta</p>
+							</div>
+						</div>
 
+						<div style={{ height: '500px', width: '100%' }} className="ag-theme-alpine">
+							<AgGridReact
+								columnDefs={this.state.columns}
+								rowData={this.state.data}
+								pagination={true}>
+							</AgGridReact>
+						</div>
+						<br></br>
+						<button className="btn btn-primary btn-lg" onClick={this.regresarAload}>Usar otro dataset</button>
 
-			<Graph xlabel={this.state.xlabel} ylabel={this.state.ylabel} x={x_1} y={x_2} c={c} ></Graph>
+						<hr className="my-4"></hr>
 
-			</div>
-			</div>
+						<div className="row">
+							<div className="col-6">
+								<div>Cantidad de vecinos:</div>
+								<input type='numeric' onChange={ (e) => { this.setState({ k: e.target.value})}}/>
+
+								<KNN x={x_1} y={y} knn={this.state.k} predictors={[this.state.xlabel]} labels={labels} />
+							</div>
+							<div className="col-6">
+								<Selecter columns={this.props.location.data.columnas} predictors={this.state.predictors} label={this.state.label} selecterCallback={this.selecterCallback.bind(this)} />
+							</div>
+						</div>
+
+						<hr className="my-4"></hr>
+
+						<div className="row align-items-center" >
+
+							<div className="col-4">
+								<div>Comprueba el punto:</div>
+								<hr className="my-4"></hr>
+								<div>
+									X:
+									<input type='numeric' onChange={ (e) => { this.setState({ xnew: e.target.value})}}/>
+									<div><GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector></div>
+								</div>
+								<br></br>
+								<div>
+									Y:
+									<input type='numeric' onChange={ (e) => { this.setState({ ynew: e.target.value})}}/>
+									<div><GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector></div>
+								</div>
+							</div>
+							<div className="col-8">
+								<Graph xlabel={this.state.xlabel} ylabel={this.state.ylabel} x={x_1} y={x_2} c={c} point={newpoint}></Graph>
+								<br></br>
+								<br></br>
+							</div>
+						</div>
+					</div>
+				</div>
 			</React.Fragment>
 		)
 	}

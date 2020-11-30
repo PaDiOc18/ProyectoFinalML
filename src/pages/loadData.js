@@ -33,6 +33,7 @@ class loadData extends React.Component {
     saveData = (results) => { 
         const { columnDefs } = this.state;
 
+        results.data.pop(); //Quita la observacion nula, y dibujaba punto en (0,0)
         //Aqui genera las columnas
         for(let i = 0; i < results.meta['fields'].length; i++){
             columnDefs.push({headerName: results.meta['fields'][i].toString(), field: results.meta['fields'][i]})

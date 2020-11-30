@@ -38,11 +38,9 @@ class graphSelector extends Component {
         const { labelsHtml } = this.state;
         return (
             <React.Fragment>
-                <div className="col-6">
-                    <select onChange={this.sendDataToParent.bind(this)}>
-                        { labelsHtml }
-                    </select>
-			    </div>
+				<select onChange={this.sendDataToParent.bind(this)}>
+					{ labelsHtml }
+				</select>
             </React.Fragment>
         )
     }

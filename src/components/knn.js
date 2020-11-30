@@ -72,14 +72,9 @@ class KNN extends React.Component {
 	renderForm(){
 		let out = this.props.predictors.map((p)=>{
 			return(
-				<div className="container">
-				<div className="row justify-conetent-start">
-				{p}
-				</div>
-				<div className="row justify-conetent-start">
-				<input type="number" name={p} onChange={this.onChangeNewX.bind(this)}/>
-				</div>
-				</div>
+				<React.Fragment>	
+				{p} <input type="number" name={p} onChange={this.onChangeNewX.bind(this)}/>
+				</React.Fragment>
 				)})
 		return(out);
 	}
@@ -91,28 +86,30 @@ class KNN extends React.Component {
 	
 	render(){
 		return (
-			<div className="container">
-			<div className="row">
-			<div className="col-12 d-flex justify-content-center">
-			Predictors:
-			</div>
-			</div>
-			<div className="row">
-			<div className="col-12">
-				{this.renderForm()}
-			</div>
-			</div>
-			<div className="row">
-			<div className="col-12">
-			<button type="button" className="btn btn-primary w-100" onClick={this.onClickPredict.bind(this)}>Predict</button>
-			</div>
-			</div>
-			<div className="row">
-			<div className="col-12">
-				Clase Perteneciente: {this.state.pred}
-			</div>
-			</div>
-			</div>
+			<React.Fragment>
+				<div className="container">
+					<div className="row">
+						<div className="col-12 d-flex justify-content-center">
+						Predictors:
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-12">
+							{this.renderForm()}
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-12">
+							<button type="button" className="btn btn-primary w-50 mt-3" onClick={this.onClickPredict.bind(this)}>Predict</button>
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-12">
+							Clase Perteneciente: {this.state.pred}
+						</div>
+					</div>
+				</div>
+			</React.Fragment>
 		);
 	}
 }

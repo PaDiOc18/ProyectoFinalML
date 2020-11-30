@@ -47,6 +47,7 @@ class Graph extends React.Component{
 
 		var data = new Array();
 
+		
 		for (var i = 0; i < classified_pairs.length; i++) {
 			data.push(
 				{
@@ -60,11 +61,25 @@ class Graph extends React.Component{
 				}
 			)
 		}
+				
+		data.push(
+			{
+					type: "scatter",
+					color: this.getRandomColor(),
+					legendText: "Tu nuevo punto",
+					showInLegend: "true",
+					markerSize: 15,
+					toolTipContent: this.props.xlabel+": {x}  "+ this.props.ylabel +": {y}",
+					dataPoints: [this.props.point]
+			}
+		)
 		
 		return data;
 	}
 
 	render() {
+		console.log(this.props.xnew)
+		console.log(this.props.ynew)
 		const options = {
 			theme: "light2",
 			animationEnabled: true,
@@ -95,11 +110,9 @@ class Graph extends React.Component{
         }
         
 		return (
-			<div>
-			  <CanvasJSChart options = {options} 
-				  /* onRef = {ref => this.chart = ref} */
-			  />			
-			</div>
+			<React.Fragment>
+				<CanvasJSChart options = {options} />	
+			</React.Fragment>		
 		  );
 		}
 }

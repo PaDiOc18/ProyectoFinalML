@@ -14,7 +14,13 @@ class Selecter extends React.Component{
 	
 			for(let i = 0; i < this.props.columns.length; i++){
 				labelsHtml.push(<option value={this.props.columns[i]['field']}>{this.props.columns[i]['field']}</option>)
-				checkBoxes.push(<div className='d-flex justify-content-around'>{this.props.columns[i]['field']}<input name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors.bind(this)} /></div>);
+				checkBoxes.push(
+					<div className="form-check form-check-inline">
+					{this.props.columns[i]['field']}
+					<input name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors.bind(this)}/>
+					</div>);
+
+
 			}
 	
 			this.setState({
@@ -49,16 +55,19 @@ class Selecter extends React.Component{
 	render(){
 		const { labelsHtml, checkBoxes} = this.state;
 		return(
-			<div className="row">
-			<div className="col-6">
-				<select onChange={this.onChangeLabel.bind(this)}>
-					{ labelsHtml }
-				</select>
-			</div>
-			<div className='list-group pb-2 pt-2'>
-				{ checkBoxes }
-			</div>
-			</div>
+			<React.Fragment>
+				<div className='col-6'>
+					<select onChange={this.onChangeLabel.bind(this)}>
+						{ labelsHtml }
+					</select>
+				</div>
+
+				<div className='col-6'>
+					<div className='list-group pb-2 pt-2'>
+						{ checkBoxes }
+					</div>
+				</div>
+			</React.Fragment>
 		)
 	}
 }
