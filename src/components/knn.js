@@ -10,11 +10,16 @@ class KNN extends React.Component {
 		 * this.props.knn
 		 * this.props.predictors
 		 */
+		this.new_x = new Object();
+		this.state = {
+			pred:0.0
+		}
 	}
 
 	onClickPredict(){
-		const pred = this.predict([22,10]);
-		console.log(pred);
+		console.log(Object.values(this.new_x));
+		const pred = this.predict(Object.values(this.new_x));
+		this.setState({pred:pred});
 	}
 
 	norm(x1,x2) {
@@ -33,13 +38,12 @@ class KNN extends React.Component {
 		const X = math.matrix(this.props.x),
 			size = X.size();
 		if(size.length==1){
-			nb_distance = this.norm(this.props.x,new_x)
+			nb_distance = this.norm(this.props.x,new_x[0])
 		}else if(size.length==2){
 			for(let i=0;i<size[1];i++){
 				nb_distance.push(this.norm(math.flatten(math.column(X,i)),new_x));
 			}
 		}
-
 		// picking 'k' nearest neighbours.
 		nb_distance_clone = nb_distance.copyWithin()
 		for(let i=0;i<this.props.knn;i++){
@@ -69,7 +73,7 @@ class KNN extends React.Component {
 				{p}
 				</div>
 				<div className="row justify-conetent-start">
-				<input type="number" name={p} onChange={this.onChangeNewX}/>
+				<input type="number" name={p} onChange={this.onChangeNewX.bind(this)}/>
 				</div>
 				</div>
 				)})
@@ -79,12 +83,7 @@ class KNN extends React.Component {
 	onChangeNewX(e){
 		const key = e.target.name,
 			value = e.target.value;
-		this.setState(prevState => ({
-			new_x:{
-			...prevState.new_x,
-			key:value
-			}
-		}))
+		this.new_x[key] = parseFloat(value);
 	}
 	
 	render(){
@@ -103,7 +102,12 @@ class KNN extends React.Component {
 			<div className="row">
 			<div className="col-12">
 			<button type="button" className="btn btn-primary w-100" onClick={this.onClickPredict.bind(this)}>Predict</button>
-			</div>	
+			</div>
+			</div>
+			<div className="row">
+			<div className="col-12">
+				Clase Perteneciente: {this.state.pred}
+			</div>
 			</div>
 			</div>
 		);
