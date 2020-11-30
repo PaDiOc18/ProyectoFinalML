@@ -47,8 +47,6 @@ class Selecter extends React.Component{
 			let indice = p.indexOf(e.target.name)
 			p.pop(indice)
 		}else p.push(e.target.name);
-
-		console.log(p)
 		this.props.selecterCallback(p,this.props.label);
 	}
 

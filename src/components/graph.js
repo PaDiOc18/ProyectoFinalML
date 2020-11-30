@@ -8,8 +8,8 @@ class Graph extends React.Component{
 		this.state = {
 			classes: this.props.c,
 			xlabel: this.props.xlabel,
-			ylabel: this.props.ylabel,
-			newdata: this.pairs_creator()
+			ylabel: this.props.ylabel
+			//newdata: this.pairs_creator()
 		}
     }
     
@@ -60,8 +60,7 @@ class Graph extends React.Component{
 						dataPoints: classified_pairs[i]
 				}
 			)
-		}
-				
+		}				
 		data.push(
 			{
 					type: "scatter",
@@ -78,8 +77,10 @@ class Graph extends React.Component{
 	}
 
 	render() {
-		console.log(this.props.xnew)
-		console.log(this.props.ynew)
+		//console.log(this.props.xnew)
+		//console.log(this.props.ynew)
+		//console.log('graph se renderiza')
+
 		const options = {
 			theme: "light2",
 			animationEnabled: true,

@@ -33,7 +33,7 @@ class main extends Component {
 			});
 		}
 		else {
-			console.log(this.props.location.data.columnas)
+			//console.log(this.props.location.data.columnas)
 			this.setState({
 				columns: this.props.location.data.columnas,
 				data: this.props.location.data.datos
@@ -60,7 +60,7 @@ class main extends Component {
 	}
 
 	selecterCallback(predictors, label) {
-		this.setState({ predictors: predictors, label: label });
+		this.setState({ predictors: predictors, label: label }, () => { console.log(this.state.predictors,this.state.label)});
 	}
 
 	graphSelectorCallbackX1(ylabel) {
@@ -105,7 +105,7 @@ class main extends Component {
 			c = this.getColumnsData([this.state.label])[this.state.label],
 			y = this.encoder(c),
 			labels = c.filter(this.onlyUnique),
-			newpoint = {x: this.state.xnew, y: this.state.ynew};
+			newpoint = {x: parseFloat(this.state.xnew), y: parseFloat(this.state.ynew)};
 
 		return (
 			<React.Fragment>
