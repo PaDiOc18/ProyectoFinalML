@@ -55,7 +55,7 @@ class Graph extends React.Component{
 						color: this.getRandomColor(),
 						legendText: "Clase: " + uniqueClasses[i],
 						showInLegend: "true",
-						markerSize: 15,
+						markerSize: 5,
 						toolTipContent: this.props.xlabel+": {x}  "+ this.props.ylabel +": {y}",
 						dataPoints: classified_pairs[i]
 				}
@@ -65,9 +65,9 @@ class Graph extends React.Component{
 			{
 					type: "scatter",
 					color: this.getRandomColor(),
-					legendText: "Tu nuevo punto",
+					legendText: "Punto de prueba",
 					showInLegend: "true",
-					markerSize: 15,
+					markerSize: 5,
 					toolTipContent: this.props.xlabel+": {x}  "+ this.props.ylabel +": {y}",
 					dataPoints: [this.props.point]
 			}

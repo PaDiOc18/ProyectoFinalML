@@ -10,9 +10,11 @@ class graphSelector extends Component {
     componentDidMount(){
 		if(this.props.columns.length > 0){
 			let { labelsHtml,checkBoxes } = this.state;
-	
+			
+			labelsHtml.push(<option value={'Default'} key={'Default'}>Escoge una opcion</option>)
+			
 			for(let i = 0; i < this.props.columns.length; i++){
-				labelsHtml.push(<option value={this.props.columns[i]['field']}>{this.props.columns[i]['field']}</option>)
+				labelsHtml.push(<option value={this.props.columns[i]['field']} key={this.props.columns[i]['field']}>{this.props.columns[i]['field']}</option>)
 				checkBoxes.push(<div className='d-flex justify-content-around'>{this.props.columns[i]['field']}<input name={this.props.columns[i]['field']} type="checkbox" onChange={this.onChangePredictors} /></div>);
 			}
 	

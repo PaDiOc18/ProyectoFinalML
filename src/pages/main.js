@@ -61,7 +61,7 @@ class main extends Component {
 
 	selecterCallback(predictors, label) {
 		this.setState({ predictors: predictors, label: label }, () => { 
-			console.log(this.state.predictors)
+			//console.log(this.state.predictors)
 		});
 	}
 
@@ -108,7 +108,6 @@ class main extends Component {
 			y = this.encoder(c),
 			labels = c.filter(this.onlyUnique),
 			newpoint = {x: parseFloat(this.state.xnew), y: parseFloat(this.state.ynew)};
-
 		return (
 			<React.Fragment>
 				<div className="mainContenedor">
@@ -138,7 +137,7 @@ class main extends Component {
 						<div className="row">
 							<div className="col-6">
 								<div>Cantidad de vecinos:</div>
-								<input type='numeric' onChange={ (e) => { this.setState({ k: e.target.value})}}/>
+								<input type='numeric' value={this.state.k} onChange={ (e) => { this.setState({ k: e.target.value})}}/>
 
 								<KNN x={x_1} y={y} knn={this.state.k} predictors={this.state.predictors} labels={labels} />
 							</div>
@@ -155,9 +154,9 @@ class main extends Component {
 								<div>Elige tus predictores para gráficar:</div>
 								<br></br>
 
-								<div> X1: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector></div>
+								<div> Predictor en X: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX2.bind(this)}></GraphSelector></div>
 								<br></br>
-								<div> X2: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector></div>
+								<div> Predictor en Y: <GraphSelector columns={this.props.location.data.columnas} returnData={this.graphSelectorCallbackX1.bind(this)}></GraphSelector></div>
 								
 								<br></br>
 								<br></br>
@@ -165,11 +164,11 @@ class main extends Component {
 								<br></br>
 
 								<div>
-									X: <input type='numeric' onChange={ (e) => { this.setState({ xnew: e.target.value})}}/>
+									X: <input type='numeric' value={this.state.xnew} onChange={ (e) => { this.setState({ xnew: e.target.value})}}/>
 								</div>
 								<br></br>
 								<div>
-									Y: <input type='numeric' onChange={ (e) => { this.setState({ ynew: e.target.value})}}/>
+									Y: <input type='numeric' value={this.state.ynew} onChange={ (e) => { this.setState({ ynew: e.target.value})}}/>
 								</div>
 							</div>
 							<div className="col-8">

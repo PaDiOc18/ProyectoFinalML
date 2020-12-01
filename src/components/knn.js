@@ -1,23 +1,28 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import * as math from "mathjs";
 
 class KNN extends React.Component {
 	constructor(props){
 		super(props); 
 		/**
+		 * this.props.labels
 		 * this.props.x
 		 * this.props.y
 		 * this.props.knn
 		 * this.props.predictors
 		 */
-		this.new_x = [];
+		this.new_x = new Object();
 		this.state = {
 			pred:"undefined"
 		}
 	}
 
 	onClickPredict(){
-		const pred = this.predict(this.new_x);
+		let x = new Array();
+		for(let p of this.props.predictors){
+			x.push(this.new_x[p])
+		}
+		const pred = this.predict(x);
 		this.setState({pred:this.props.labels[pred]});
 	}
 
@@ -31,16 +36,15 @@ class KNN extends React.Component {
 				k_nearest_neighbours = new Array(),
 				k_neighbours_label = new Array(),
 				nb_distance_clone = new Array(),
-				label_counter = math.zeros(this.props.y.length)._data,
-				d = 0.0;
+				label_counter = math.zeros(this.props.y.length)._data;
 			
 			// Calculating distance between 'x' and 'x_i'
 			const X = math.matrix(this.props.x),
 				size = X.size();
-			if(size.length==1){
+			if(size.length===1){
 				console.log(this.props.x);
-				nb_distance = this.norm(this.props.x,new_x)//<---new_x=number
-			}else if(size.length==2){
+				nb_distance = this.norm(this.props.x,new_x[0])//<---new_x=number
+			}else if(size.length===2){
 				for(let i=0;i<size[1];i++){
 					nb_distance.push(this.norm(math.flatten(math.column(X,i)),new_x));//<---new_x
 				}
@@ -53,7 +57,6 @@ class KNN extends React.Component {
 			}
 
 			// Getting the label of the 'k' nearest neighbours
-			// if the label is a string, save the whole label name; else it MUST be numeric, save the number of the class which belongs too. 
 			k_neighbours_label = k_nearest_neighbours.map(index=>this.props.y[index]);
 
 			// `Predicting`
@@ -62,7 +65,7 @@ class KNN extends React.Component {
 			}
 			return label_counter.indexOf(math.max(label_counter))
 		}catch(error){
-			alert("Dataset trash. +1 bozal para Diego");
+			alert("No sirve dataset");
 		}
 	}
 
@@ -77,22 +80,21 @@ class KNN extends React.Component {
 				</React.Fragment>
 			)
 		}
+
+		//console.log(this.new_x)
+		console.log(this.props.labels)
+		console.log(this.new_x)
+		//console.log(this.state.pred)
+
 		return inputBoxes;
 	}
 
 	onChangeNewX(e){
+		const key = e.target.name;
 		const value = e.target.value;
-		this.new_x = parseFloat(value);
+		this.new_x[key] = value;
 	}
-	
-	render(){
-	}
-
-	onChangeNewX(e){
-		const value = e.target.value;
-		this.new_x = parseFloat(value);
-	}
-	
+		
 	render(){
 		return (
 			<React.Fragment>

@@ -12,6 +12,8 @@ class Selecter extends React.Component{
 		if(this.props.columns.length > 0){
 			let { labelsHtml,checkBoxes } = this.state;
 	
+			labelsHtml.push(<option value={'Default'} key={'Default'}>Escoge una opcion</option>)
+
 			for(let i = 0; i < this.props.columns.length; i++){
 				labelsHtml.push(<option value={this.props.columns[i]['field']}>{this.props.columns[i]['field']}</option>)
 				checkBoxes.push(
@@ -52,19 +54,27 @@ class Selecter extends React.Component{
 		const { labelsHtml, checkBoxes} = this.state;
 		return(
 			<React.Fragment>
-				<div className='col-6'>
-					<label htmlFor='elSelect'><h6>Selecciona tu respuesta (Y):</h6></label>
-					<select name='elSelect' onChange={this.onChangeLabel.bind(this)}>
-						{ labelsHtml }
-					</select>
-				</div>
-
-				<div className='col-6'>
-					<label htmlFor='losCheckboxes'><h6>Marca los predictores a usar (X):</h6></label>
-					<div name ='losCheckboxes' className='list-group pt-2'>
-						{ checkBoxes }
+				<div className= "row justify-content-center text-center">
+					<div className='col'>
+						<label htmlFor='elSelect'><h6>Selecciona tu respuesta (clasificaciones):</h6></label>
+						<br></br>
+						<select name='elSelect' onChange={this.onChangeLabel.bind(this)}>
+							{ labelsHtml }
+						</select>
 					</div>
 				</div>
+				<div className= "row justify-content-center text-center">
+					<div className='col'>
+						<label htmlFor='losCheckboxes'><h6>Marca los predictores a usar (X):</h6></label>
+						<label htmlFor='losCheckboxes'><h6>*Nota: Se debe seleccionar en orden descendiente ↓ y deseleccionar en orden ascendente ↑*</h6></label>
+						<div name ='losCheckboxes' className='pt-2'>
+							{ checkBoxes }
+						</div>
+					</div>
+				</div>
+
+
+
 			</React.Fragment>
 		)
 	}
